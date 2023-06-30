@@ -2,9 +2,9 @@
 
 pragma solidity ^0.8.18;
 
-import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
-import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
-import "@chainlink/contracts/src/v0.8/interfaces/KeeperCompatibleInterface.sol";
+import {VRFConsumerBaseV2} from "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
+import {VRFCoordinatorV2Interface} from "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
+import {KeeperCompatibleInterface} from "@chainlink/contracts/src/v0.8/interfaces/KeeperCompatibleInterface.sol";
 
 error Raffle__NotEnoughETHEntered();
 error Raffle__TransferFailed();
@@ -25,8 +25,8 @@ error Raffle__UpkeepNotNeeded(
 contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
     /* Type declaration */
     enum RaffleState {
-        OPEN,
-        CALCULATING
+        OPEN, // 0
+        CALCULATING //1
     }
 
     /* State Variables */
@@ -132,17 +132,20 @@ contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
         uint256 /*requestId*/,
         uint256[] memory randomWords
     ) internal override {
+        // Checks
+        // Effects (our own contract)
         uint256 indexOfWinner = randomWords[0] % s_players.length;
         address payable recentWinner = s_players[indexOfWinner];
         s_recentWinner = recentWinner;
         s_raffleState = RaffleState.OPEN;
         s_players = new address payable[](0);
         s_lastTimeStamp = block.timestamp;
+        // Interactions (Other contracts)
+        emit WinnerPicked(recentWinner);
         (bool success, ) = recentWinner.call{value: address(this).balance}("");
         if (!success) {
             revert Raffle__TransferFailed();
         }
-        emit WinnerPicked(recentWinner);
     }
 
     /* View / Pure functions */
