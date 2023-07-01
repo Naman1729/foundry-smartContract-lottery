@@ -6,15 +6,6 @@ import {VRFConsumerBaseV2} from "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2
 import {VRFCoordinatorV2Interface} from "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import {KeeperCompatibleInterface} from "@chainlink/contracts/src/v0.8/interfaces/KeeperCompatibleInterface.sol";
 
-error Raffle__NotEnoughETHEntered();
-error Raffle__TransferFailed();
-error Raffle__NotOpen();
-error Raffle__UpkeepNotNeeded(
-    uint256 currentBalance,
-    uint256 numPlayers,
-    uint256 raffleState
-);
-
 /**
  * @title A sample Raffle Contract
  * @author Naman Gautam
@@ -23,6 +14,16 @@ error Raffle__UpkeepNotNeeded(
  */
 
 contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
+    /* Errors */
+    error Raffle__NotEnoughETHEntered();
+    error Raffle__TransferFailed();
+    error Raffle__NotOpen();
+    error Raffle__UpkeepNotNeeded(
+        uint256 currentBalance,
+        uint256 numPlayers,
+        uint256 raffleState
+    );
+
     /* Type declaration */
     enum RaffleState {
         OPEN, // 0
