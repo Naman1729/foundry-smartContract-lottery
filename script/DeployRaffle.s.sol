@@ -17,6 +17,10 @@ contract DeployRaffle is Script {
             uint256 interval
         ) = helperConfig.activeNetworkConfig();
 
+        if(subscriptionId == 0){
+            
+        }
+
         vm.startBroadcast();
         Raffle raffle = new Raffle(
             vrfCoordinatorV2,
