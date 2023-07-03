@@ -14,8 +14,11 @@ contract HelperConfig is Script {
         uint32 callbackGasLimit;
         uint256 interval;
         address link;
+        uint256 deployerkey;
     }
 
+    uint256 public constant DEFAULT_ANVIL_KEY =
+        0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80;
     NetworkConfig public activeNetworkConfig;
 
     constructor() {
@@ -26,7 +29,7 @@ contract HelperConfig is Script {
         }
     }
 
-    function getSepoliaEthConfig() public pure returns (NetworkConfig memory) {
+    function getSepoliaEthConfig() public view returns (NetworkConfig memory) {
         return
             NetworkConfig({
                 vrfCoordinatorV2: 0x8103B0A8A00be2DDC778e6e7eaa21791Cd364625,
@@ -35,7 +38,8 @@ contract HelperConfig is Script {
                 subscriptionId: 2915,
                 callbackGasLimit: 500000,
                 interval: 30,
-                link: 0x779877A7B0D9E8603169DdbD7836e478b4624789
+                link: 0x779877A7B0D9E8603169DdbD7836e478b4624789,
+                deployerkey: vm.envUint("PRIVATE_KEY")
             });
     }
 
@@ -63,7 +67,8 @@ contract HelperConfig is Script {
                 subscriptionId: 0,
                 callbackGasLimit: 500000,
                 interval: 30,
-                link: address(link)
+                link: address(link),
+                deployerkey: DEFAULT_ANVIL_KEY
             });
     }
 }
